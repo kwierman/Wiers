@@ -14,6 +14,11 @@ int main(){
 	Rail* e = new Rail(0);
 
 	a->SetInput(d);
+	b->SetInput(a);
+	c->SetInput(b);
+	c->SetOutput(e);
+
+	b->GetVoltage();
 
 	//a->ConnectInput( new Rail(5)  );//connect the input to  a 5V rail
 	//b->ConnectInput(a->GetOutput() );
@@ -21,9 +26,8 @@ int main(){
 	//b->ConnectOutput(new Rail(0.0) );
 	//c->ConnectOutput(new Rail(0.0) );
 
-	std::cout<<a->GetInput()->GetVoltage()<<std::endl;
+	//std::cout<<a->GetInput()->GetVoltage()<<std::endl;
 
-	//return 0;
 	return 0;
 }
 
