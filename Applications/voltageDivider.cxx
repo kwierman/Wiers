@@ -1,35 +1,45 @@
 #include "Resistor.h"
 #include "Rail.h"
-
+#include "Utilities.h"
 #include <iostream>
 
 using namespace Wiers;
 int main(){
 
-	Resistor* a = new Resistor(5);
+	signal(SIGINT, signal_callback_handler);
+	signal(SIGABRT, signal_callback_handler);
+	signal(SIGBUS ,signal_callback_handler);
+	signal(SIGSEGV ,signal_callback_handler);
+
+	Resistor* a = new Resistor(1);
 	Resistor* b = new Resistor(5);
-	Resistor* c = new Resistor(5);
+	Resistor* c = new Resistor(10);
 
 	Rail* d = new Rail(10);
 	Rail* e = new Rail(0);
 
-	a->SetInput(d);
-	b->SetInput(a);
-	c->SetInput(b);
-	c->SetOutput(e);
+	a->SetInput(	d->GetOutput() );
+	b->SetInput(	a->GetOutput() );
+	c->SetInput(	b->GetOutput() );
+	c->SetOutput(	e->GetInput()  );
 
-	b->GetVoltage();
+	//f->SetInput(b);
+	//f->SetOutput(e);
 
-	//a->ConnectInput( new Rail(5)  );//connect the input to  a 5V rail
-	//b->ConnectInput(a->GetOutput() );
-	//c->ConnectInput(a->GetOutput() );
-	//b->ConnectOutput(new Rail(0.0) );
-	//c->ConnectOutput(new Rail(0.0) );
+	a->Update();
 
-	//std::cout<<a->GetInput()->GetVoltage()<<std::endl;
+	std::cout<<a->GetVoltage()<<std::endl;;
+	std::cout<<b->GetVoltage()<<std::endl;
+	std::cout<<c->GetVoltage()<<std::endl;
+	std::cout<<f->GetVoltage()<<std::endl;
 
 	return 0;
 }
 
+//Logical Steps here
+//start connecting components
+//call update on one component
+//it tries to reconcile the voltage drop with the current across it
 
-//if you want to ask the question of what is the voltage at any particular point
+//if voltage != current, the it tells it's connection that it needs a voltage update and current update
+	//this part needs to be egalitarian

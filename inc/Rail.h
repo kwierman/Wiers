@@ -11,11 +11,8 @@ namespace Wiers{
 	public:
 		Rail(double x) : voltage(x) {}
 
-		double GetInputImpedance(){return 0;};
-		double GetOutputImpedance(){return 0;}
+		void Update(){}
 
-		double GetInputVoltage() {return voltage;}
-		double GetOutputVoltage(){return voltage;}
 	};
 }
 

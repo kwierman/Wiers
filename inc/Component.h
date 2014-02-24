@@ -1,24 +1,30 @@
 #ifndef Component_h_
 #define Component_h_
 
+
 namespace Wiers{
+	class Connection;//<! For the connections between other components
+
 	class Component{
+		static unsigned int count;
+		unsigned int id;
 	protected:
-		Component* input;
-		Component* output;
+		Connection* input;
+		Connection* output;
 
 	public:
-		void SetInput(Component* other){
-			this->input = other;
-		}
-		void SetOutput(Component* other){
-			this->output = other;
-		}
+		Component() : input(0), output(0){id=count++;}
 
-		virtual double GetInputImpedance()=0;
-		virtual double GetOutputImpedance()=0;
-		virtual double GetInputVoltage()=0;
-		virtual double GetOutputVoltage()=0;
+		unsigned int GetID(){return this->id;}
+
+		void SetInput(Component* other);
+		void SetOutput(Component* other);
+
+		Connection* GetInput();
+		Connection* GetOutput();
+
+		virtual void Update()=0;
 	};
+
 }
 #endif //Component_h_
