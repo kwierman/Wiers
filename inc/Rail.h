@@ -1,17 +1,23 @@
 #ifndef Rail_h_
 #define Rail_h_
 
-#include "Component.h"
+#include "Connection.h"
+
+#include <iostream>
 
 namespace Wiers{
 
-	class Rail : public Component{
-		double voltage;
+	class Rail : public Connection{
 
 	public:
-		Rail(double x) : voltage(x) {}
+		Rail(double x) : Connection() {voltage = x;}
 
 		void Update(){}
+
+		virtual bool SetVoltage(double){
+			std::cout<<"Attempting to Change Rail Voltage"<<std::endl;
+			return false;
+		}//voltages are not set by other 
 
 	};
 }

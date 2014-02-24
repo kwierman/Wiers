@@ -1,4 +1,4 @@
-#include "Resistor.h"
+#include "Component.h"
 #include "Rail.h"
 #include "Utilities.h"
 #include <iostream>
@@ -11,27 +11,29 @@ int main(){
 	signal(SIGBUS ,signal_callback_handler);
 	signal(SIGSEGV ,signal_callback_handler);
 
-	Resistor* a = new Resistor(1);
-	Resistor* b = new Resistor(5);
-	Resistor* c = new Resistor(10);
+	Component* a = new Component(1);
+	Component* b = new Component(5);
+	Component* c = new Component(10);
 
 	Rail* d = new Rail(10);
 	Rail* e = new Rail(0);
 
-	a->SetInput(	d->GetOutput() );
+	a->SetInput(	d );
 	b->SetInput(	a->GetOutput() );
 	c->SetInput(	b->GetOutput() );
-	c->SetOutput(	e->GetInput()  );
+	c->SetOutput(	e );
 
 	//f->SetInput(b);
 	//f->SetOutput(e);
 
 	a->Update();
+	b->Update();
+	c->Update();
 
-	std::cout<<a->GetVoltage()<<std::endl;;
-	std::cout<<b->GetVoltage()<<std::endl;
-	std::cout<<c->GetVoltage()<<std::endl;
-	std::cout<<f->GetVoltage()<<std::endl;
+	std::cout<<a->GetDeltaV()<<std::endl;;
+	std::cout<<b->GetDeltaV()<<std::endl;
+	std::cout<<c->GetDeltaV()<<std::endl;
+	//std::cout<<f->GetDeltaV()<<std::endl;
 
 	return 0;
 }

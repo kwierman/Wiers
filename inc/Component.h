@@ -11,19 +11,23 @@ namespace Wiers{
 	protected:
 		Connection* input;
 		Connection* output;
+		double resistance;
+		double current;
 
 	public:
-		Component() : input(0), output(0){id=count++;}
+		Component(double x) : input(0), output(0), resistance(x){ id=count++; }
 
 		unsigned int GetID(){return this->id;}
 
-		void SetInput(Component* other);
-		void SetOutput(Component* other);
+		void SetInput(Connection* other);
+		void SetOutput(Connection* other);
 
 		Connection* GetInput();
 		Connection* GetOutput();
 
-		virtual void Update()=0;
+		double GetDeltaV();
+
+		virtual void Update();
 	};
 
 }

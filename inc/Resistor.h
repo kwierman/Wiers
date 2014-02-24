@@ -12,7 +12,7 @@ namespace Wiers{
 		double current;//<! the dynamic current across this device.
 
 	public:
-		Resistor(double x) : resistance(x), current(0.0) {}
+		//Resistor(double x) : resistance(x), current(0.0) {}
 
 		void Update();
 
