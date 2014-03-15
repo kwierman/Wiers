@@ -1,10 +1,18 @@
 #include "WComponent.h"
 #include "WConnection.h"
+#include "WElementVisitor.h"
 #include "WMath.h"
+
+#include <iostream>
 
 namespace Wiers{
 
-	double WComponent::fACCurrentMax=1.e6;
+	long double WComponent::fACCurrentMax=1.e6;
+
+	bool WComponent::IsValid(){
+		if(n_iterations>max_iterations) return true;
+		return ( GetDeltaV() == this->fCurrent * this->fResistivity );
+	}
 
 	void WComponent::SetInput(WConnection* other){
 		this->input = other;
@@ -28,25 +36,14 @@ namespace Wiers{
 		}
 		return output;
 	}
-	double WComponent::GetDeltaV(){
+	long double WComponent::GetDeltaV(){
 		return this->output->GetVoltage() - this->input->GetVoltage();
 	}
-	double WComponent::GetDeltaACV(){
+	long double WComponent::GetDeltaACV(){
 		return output->GetACVoltage() - input->GetACVoltage();
 	}
-	void WComponent::DCUpdate(){
-		n_iterations=0;
-		SetValid(GetDeltaV() == this->fCurrent * this->fResistivity );
-		while(!IsValid() ){
-			if(n_iterations++ >max_iterations) return;
-			this->fCurrent = GetDeltaV()/(this->fResistivity);
-			input->NotifyOnOutput();
-			output->NotifyOnInput();
-			SetValid(GetDeltaV() == this->fCurrent * this->fResistivity );
-		}
-	}
 
-	void WComponent::ACUpdate(double timeStep, double timeToGo){
+	void WComponent::ACUpdate(long double timeStep, long double timeToGo){
 		fGlobalTime=0.0;
 		n_iterations=0;
 		while (fGlobalTime<= timeToGo){
@@ -65,29 +62,8 @@ namespace Wiers{
 			input->UpdateACInput();
 			output->UpdateACOutput();
 			fGlobalTime+=fCurrentTimeStep;
-			DCUpdate();
-		}
-	}
-	void WComponent::NotifyOnInput(){
-		if(n_iterations++ >max_iterations) return;
-		if(!output) this->output = new WConnection();
-
-		SetValid(GetDeltaV() == this->fCurrent * this->fResistivity );
-
-		if( !IsValid() ){	
-			this->fCurrent = GetDeltaV()/(this->fResistivity);
-			output->NotifyOnInput();
-		}
-	}
-	void WComponent::NotifyOnOutput(){
-		if(n_iterations++ >max_iterations) return;
-		if(!input) this->input = new WConnection();
-
-		SetValid(GetDeltaV() == this->fCurrent * this->fResistivity );
-
-		if( !IsValid() ){		
-			this->fCurrent = GetDeltaV()/(this->fResistivity);
-			input->NotifyOnOutput();
+			UpdateWithVisitor();
+			std::cout<<fCurrent<<std::endl;
 		}
 	}
 
@@ -117,5 +93,21 @@ namespace Wiers{
 	void WComponent::UpdateACOutput(){
 		fCurrent+=fACCurrent;
 		output->UpdateACOutput();
+	}
+
+	void WComponent::UpdateWithVisitor(){
+		WElementVisitor visitor;
+		visitor.set_primary(this);
+		visitor.Go();
+	}
+	void WComponent::AcceptVisitorUpstream(WElementVisitor* visitor ){
+		++n_iterations;
+		this->fCurrent = GetDeltaV()/(this->fResistivity);
+		visitor->put_on_stack(input);
+	}
+	void WComponent::AcceptVisitorDownStream(WElementVisitor* visitor){
+		++n_iterations;
+		this->fCurrent = GetDeltaV()/(this->fResistivity);
+		visitor->put_on_stack(output);
 	}
 }

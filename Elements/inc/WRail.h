@@ -9,9 +9,12 @@ namespace Wiers{
 
 	public:
 		WRail(double voltage) : WConnection() {SetVoltage(voltage);}
+		bool IsValid(){return true;}
 		void DCUpdate(){}
 		void NotifyOnInput(){}
 		void NotifyOnOutput(){}
+		void AcceptVisitorUpstream(WElementVisitor*){}
+		void AcceptVisitorDownStream(WElementVisitor*){}
 	};
 
 }

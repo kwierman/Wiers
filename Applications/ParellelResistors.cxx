@@ -31,7 +31,7 @@ int main(){
 
 	c.SetOutput( &e );
 
-	a.DCUpdate();
+	a.UpdateWithVisitor();
 
 	std::cout<<std::endl;
 	std::cout<<"A Voltage: "<<a.GetDeltaV()<<std::endl;

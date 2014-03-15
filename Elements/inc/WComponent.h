@@ -12,26 +12,23 @@ namespace Wiers{
 		WConnection* input;
 		WConnection* output;
 
-		double fResistivity;//<! This is the DC impedance of the component.
-		double fReactance;
+		long double fResistivity;//<! This is the DC impedance of the component.
+		long double fReactance;
 
-		double fCurrent;//<! This is the DC current of the component
-		double fACCurrent;
-		static double fACCurrentMax;
+		long double fCurrent;//<! This is the DC current of the component
+		long double fACCurrent;
+		static long double fACCurrentMax;
 
 	public:
-		WComponent(double resistivity=1.0, double reactance=0.0) : fResistivity(resistivity), 
+		WComponent(long double resistivity=1.0, long double reactance=0.0) : fResistivity(resistivity), 
 			fCurrent(0.0), input(0), output(0), fReactance(reactance), fACCurrent(0.0) {}
+
+		virtual bool IsValid();
 		
-		virtual double GetImpedance() const {return fResistivity;}
-		virtual double GetCurrent() const {return fCurrent;}
-		virtual double GetACCurrent() const {return fACCurrent;}
-		virtual double GetDeltaV();
-		
-		virtual void DCUpdate();
-		
-		virtual void NotifyOnInput();
-		virtual void NotifyOnOutput();
+		virtual long double GetImpedance() const {return fResistivity;}
+		virtual long double GetCurrent() const {return fCurrent;}
+		virtual long double GetACCurrent() const {return fACCurrent;}
+		virtual long double GetDeltaV();
 
 		virtual void SetInput(WConnection*);
 		virtual void SetOutput(WConnection*);
@@ -39,18 +36,22 @@ namespace Wiers{
 		WConnection* GetInput();
 		WConnection* GetOutput();
 		
-		virtual void ACUpdate(double timeStep, double TimeToGo);
+		virtual void ACUpdate(long double timeStep, long double TimeToGo);
 		virtual void CheckACInput();
 		virtual void CheckACOutput();
 
 		virtual void UpdateACInput();
 		virtual void UpdateACOutput();
 
-		virtual double GetDeltaACV();
+		virtual long double GetDeltaACV();
+
+		void UpdateWithVisitor();
+		void AcceptVisitorUpstream(WElementVisitor*);
+		void AcceptVisitorDownStream(WElementVisitor*);
 
 	protected:
-		void SetImpedance(double x){this->fResistivity = x;}
-		void SetCurrent(double x){this->fCurrent=x;} 
+		void SetImpedance(long double x){this->fResistivity = x;}
+		void SetCurrent(long double x){this->fCurrent=x;} 
 	};
 }
 

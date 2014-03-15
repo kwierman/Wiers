@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 project(Wiers)
 #----------------------------------------------------------------------------
-set(SOURCE_FOLDERS Common Math Elements Components )
+set(SOURCE_FOLDERS Common Math Elements Components Visitors)
 set(SOURCE_HEADERS)
 set(SOURCE_FILES)
 #set(LIBRARY_LIST)

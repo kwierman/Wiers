@@ -24,10 +24,11 @@ int main(){
 	
 	c.SetOutput(&d);
 	
-	b.DCUpdate();
+	//b.DCUpdate();
+	b.UpdateWithVisitor();
 	
-	std::cout<<b.GetDeltaV()<<std::endl;
-	std::cout<<b.GetCurrent()<<std::endl;
+	std::cout<<c.GetDeltaV()<<std::endl;
+	std::cout<<c.GetCurrent()<<std::endl;
 
 	return 0;
 }

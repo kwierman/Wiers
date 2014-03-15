@@ -1,4 +1,5 @@
-#include "WComponent.h"
+#include "WResistor.h"
+#include "WCapacitor.h"
 #include "WRail.h"
 #include "WUtilities.h"
 #include <iostream>
@@ -12,17 +13,16 @@ int main(){
 	signal(SIGSEGV ,signal_callback_handler);
 
 	WRail a(10.0);
-	WComponent b(5.0);
-	WRail c(0.0);
+	WRail b(0.0);
 
-	b.SetInput(&a);
-	b.SetOutput(&c);
+	WResistor r(10);//Make this a 10
+	WCapacitor c(0.5);
 
-	//b.DCUpdate();
-	b.UpdateWithVisitor();
+	r.SetInput(&a);
+	c.SetInput(r.GetOutput() );
 
-	std::cout<<b.GetDeltaV()<<std::endl;
-	std::cout<<b.GetCurrent()<<std::endl;
+	c.SetOutput(&b);
 
+	c.ACUpdate(0.1, 10.0);
 	return 0;
 }

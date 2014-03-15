@@ -12,45 +12,47 @@ namespace Wiers{
 		std::vector<WComponent*> inputs;
 		std::vector<WComponent*> outputs;
 		typedef std::vector<WComponent*>::iterator comp_it;
-		double fVoltage;//<! The voltage relative to the global ground
-		double fACVoltage;
-		double fReactance;
+		long double fVoltage;//<! The voltage relative to the global ground
+		long double fACVoltage;
+		long double fReactance;
 
-		static double fACVoltageMax;
+		static long double fACVoltageMax;
 
 	public:
-		WConnection(double voltage=0.0, double reactance=0.0) : fVoltage(voltage), 
+		WConnection(long double voltage=0.0, long double reactance=0.0) : fVoltage(voltage), 
 			fReactance(reactance), fACVoltage(0.0) {}
+
+		virtual bool IsValid();
 
 		void SetInput(WComponent* const );
 		void SetOutput(WComponent* const );
 		std::vector<WComponent*> GetInputs(){return inputs;}
 		std::vector<WComponent*> GetOutputs(){return outputs;}
 
-		double GetVoltage() const{return this->fVoltage;}
-		double GetACVoltage() const {return this->fACVoltage;}
-		virtual double GetInputCurrent();
-		virtual double GetOutputCurrent();
-		virtual double GetTotalCurrent();
-		virtual double GetInputImpedance();
-		virtual double GetOutputImpedance();
-		virtual double GetVoltageDifference();
+		long double GetVoltage() const {return this->fVoltage;}
+		long double GetACVoltage() const {return this->fACVoltage;}
+		virtual long double GetInputCurrent();
+		virtual long double GetOutputCurrent();
+		virtual long double GetTotalCurrent();
+		virtual long double GetInputImpedance();
+		virtual long double GetOutputImpedance();
+		virtual long double GetVoltageDifference();
 
-		virtual void DCUpdate();
 
-		virtual void NotifyOnInput();
-		virtual void NotifyOnOutput();
-
-		virtual void ACUpdate(double timeStep, double TimeToGo);
-		virtual double GetTotalACCurrent();
+		virtual void ACUpdate(long double timeStep, long double TimeToGo);
+		virtual long double GetTotalACCurrent();
 		virtual void CheckACInput();
 		virtual void CheckACOutput();
 
 		virtual void UpdateACInput();
 		virtual void UpdateACOutput();
+
+		void UpdateWithVisitor();
+		void AcceptVisitorUpstream(WElementVisitor*);
+		void AcceptVisitorDownStream(WElementVisitor*);
 	
 	protected:
-		void SetVoltage(double x){this->fVoltage = x;}
+		void SetVoltage(long double x){this->fVoltage = x;}
 	};
 }
 

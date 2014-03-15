@@ -3,34 +3,37 @@
 
 namespace Wiers{
 
+	class WElementVisitor;
 	class WElement{
 		bool valid;//<!Set this flag
 		static unsigned int count;
 		unsigned int id;
 	protected:
 		static unsigned int decimal_places;
-		static unsigned int n_iterations;
+		unsigned int n_iterations;
 		static unsigned int max_iterations;
-		static double fGlobalTime;
-		static double fCurrentTimeStep;
+		static long double fGlobalTime;
+		static long double fCurrentTimeStep;
 
 	public:
-		WElement() : valid(false), id(++count){}
-		bool IsValid() const {return valid;}
+		WElement() : valid(false), id(++count), n_iterations(0){}
+		virtual bool IsValid()=0;
 		void SetValid(bool x){valid = x;}
 		unsigned int GetID(){return this->id;}
 
-		virtual void DCUpdate()=0;
-		virtual void NotifyOnInput()=0;
-		virtual void NotifyOnOutput()=0;
-
 		//There are the AC Components
-		virtual void ACUpdate(double timeStep, double TimeToGo)=0;
+		virtual void ACUpdate(long double timeStep, long double TimeToGo)=0;
 		virtual void CheckACInput()=0;
 		virtual void CheckACOutput()=0;
 
 		virtual void UpdateACInput()=0;
 		virtual void UpdateACOutput()=0;
+
+		//This is for the visitor pattern
+		virtual void UpdateWithVisitor()=0;//Starts the whole process
+		virtual void AcceptVisitorUpstream(WElementVisitor*)=0;
+		virtual void AcceptVisitorDownStream(WElementVisitor*)=0;
+
 	};
 
 }
