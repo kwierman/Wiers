@@ -2,6 +2,7 @@
 #include "WRail.h"
 #include "WUtilities.h"
 #include <iostream>
+#include <signal.h>
 
 using namespace Wiers;
 int main(){
@@ -24,7 +25,6 @@ int main(){
 	
 	c.SetOutput(&d);
 	
-	//b.DCUpdate();
 	b.UpdateWithVisitor();
 	
 	std::cout<<c.GetDeltaV()<<std::endl;
